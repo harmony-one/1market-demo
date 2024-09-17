@@ -1,10 +1,10 @@
 {
-  "networkId": 1581350973751,
-  "lmsrAddress": "0xDF9FD2e8Cf22F173168F320172bBBB29f6d6b011",
+  "networkId": 1666600000,
+  "lmsrAddress": "0xD4394B6f48E4BB5588c122e3866c4268c68BB33f",
   "markets": [
     {
-      "questionId": "0x4b22fe478b95fdaa835ddddf631ab29f12900b62061e0c5fd8564ddb7b684333",
-      "title": "Will the summer 2020 in Germany break again weather records? ",
+      "questionId": "0xf85a6638ffa6c627d3df52677939335456fbaefd189af5eebc825c610fe094eb",
+      "title": "Will Trump say 'Crypto/Bitcoin' during Nevada rally?",
       "outcomes": [
         {
           "title": "Yes",
@@ -14,8 +14,9 @@
           "title": "No",
           "short": "No"
         }
-      ]
+      ],
+      "imageUrl": "https://polymarket.com/_next/image?url=https%3A%2F%2Fpolymarket-upload.s3.us-east-2.amazonaws.com%2Fwhat-will-trump-say-during-nevada-rally-ZhQfdAgABNMF.jpg&w=600&q=100"
     }
   ],
-  "network": "local"
+  "network": "harmony"
 }

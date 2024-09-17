@@ -31,8 +31,8 @@
     "web3connect": "^1.0.0-beta.33"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "start": "react-app-rewired --openssl-legacy-provider start",
+    "build": "react-app-rewired --openssl-legacy-provider build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "prettier": "prettier --write './src/**/*.{ts,tsx}'",

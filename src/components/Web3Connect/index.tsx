@@ -13,7 +13,7 @@ type Props = {
 let web3ConnectListenersAdded = false
 
 const web3Connect = new Web3Connect.Core({
-  network: getCurrentNetworkName() || 'rinkeby',
+  network: getCurrentNetworkName() || 'harmony',
   providerOptions: {
     walletconnect: {
       package: WalletConnectProvider,
