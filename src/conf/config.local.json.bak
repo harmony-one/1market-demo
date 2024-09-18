@@ -1,10 +1,11 @@
 {
-  "networkId": 1666600000,
-  "lmsrAddress": "0x7A98B7Eeb9D364444aab8344d6e66639F983128e",
+  "networkId": 1726642451370,
+  "lmsrAddress": "0xDF9FD2e8Cf22F173168F320172bBBB29f6d6b011",
   "markets": [
     {
       "questionId": "0xc17b841e5abfac55f4ec7278a7e3d6164a35e348b1ac24c04b7eddea3b126fbe",
-      "title": "Will Trump say 'Crypto/Bitcoin' during Michigan town hall?",
+      "title": "Will Trump say 'Crypto/Bitcoin' during the debates?",
+      "expirationTimestamp": 1727654400000,
       "outcomes": [
         {
           "title": "Yes",
