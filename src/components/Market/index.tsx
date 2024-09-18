@@ -90,6 +90,7 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
     const marketData = {
       lmsrAddress: markets.lmsrAddress,
       title: markets.markets[0].title,
+      expirationTimestamp: markets.markets[0].expirationTimestamp,
       outcomes,
       stage: MarketStage[await marketMakersRepo.stage()],
       questionId: markets.markets[0].questionId,
@@ -190,11 +191,13 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
 
   const isMarketClosed =
     isConditionLoaded && MarketStage[marketInfo.stage].toString() === MarketStage.Closed.toString()
+  const isMarketExpired = marketInfo && Date.now() > marketInfo.expirationTimestamp
   return (
     <Layout
       account={account}
       isConditionLoaded={isConditionLoaded}
       isMarketClosed={isMarketClosed}
+      isMarketExpired={isMarketExpired}
       marketInfo={marketInfo}
       setSelectedAmount={setSelectedAmount}
       selectedAmount={selectedAmount}

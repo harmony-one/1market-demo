@@ -1,7 +1,8 @@
 module.exports = [
   {
-    questionId: "0xa068e7686c9e8b42cc69cc3cc15bd5cd46db968138ae24c626b6b2bb1a86b3b5",
-    title: "Will Trump say 'Crypto/Bitcoin' during Nevada rally?",
+    questionId: "0xc17b841e5abfac55f4ec7278a7e3d6164a35e348b1ac24c04b7eddea3b126fbe",
+    title: "Will Trump say 'Crypto/Bitcoin' during the debates?",
+    expirationTimestamp: Date.parse('30 Sep 2024 00:00:00 GMT').valueOf(),
     outcomes: [
       {
         title: "Yes",
@@ -12,6 +13,6 @@ module.exports = [
         short: "No"
       }
     ],
-    imageUrl: 'https://polymarket.com/_next/image?url=https%3A%2F%2Fpolymarket-upload.s3.us-east-2.amazonaws.com%2Fwhat-will-trump-say-during-nevada-rally-ZhQfdAgABNMF.jpg&w=600&q=100'
+    imageUrl: 'https://polymarket.com/_next/image?url=https%3A%2F%2Fpolymarket-upload.s3.us-east-2.amazonaws.com%2Fwhat-will-trump-say-during-michigan-rally-aYFXl7b0S2r8.jpg&w=256&q=100'
   }
 ];

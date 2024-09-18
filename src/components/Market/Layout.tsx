@@ -1,9 +1,12 @@
 import React from 'react'
 import { Paper, Button, TextField, RadioGroup, FormControlLabel, Radio } from '@material-ui/core'
 import styles from '../style.module.css'
+import {Box, Text} from 'grommet'
+import moment from 'moment'
 
 type TradingFormProps = {
   isMarketClosed: boolean
+  isMarketExpired: boolean
   marketInfo: any
   setSelectedAmount: any
   setSelectedOutcomeToken: any
@@ -13,6 +16,7 @@ type TradingFormProps = {
 type TraderActionsProps = {
   marketInfo: any
   isMarketClosed: boolean
+  isMarketExpired: boolean
   selectedAmount: string
   redeem: any
   buy: any
@@ -34,6 +38,7 @@ type LayoutProps = {
   account: string
   isConditionLoaded: boolean
   isMarketClosed: boolean
+  isMarketExpired: boolean
   marketInfo: any
   setSelectedAmount: any
   selectedAmount: string
@@ -48,6 +53,7 @@ type LayoutProps = {
 
 const TradingForm: React.FC<TradingFormProps> = ({
   isMarketClosed,
+  isMarketExpired,
   marketInfo,
   setSelectedAmount,
   setSelectedOutcomeToken,
@@ -97,6 +103,7 @@ const TradingForm: React.FC<TradingFormProps> = ({
 const TraderActions: React.FC<TraderActionsProps> = ({
   marketInfo,
   isMarketClosed,
+  isMarketExpired,
   selectedAmount,
   redeem,
   buy,
@@ -112,10 +119,10 @@ const TraderActions: React.FC<TraderActionsProps> = ({
       >
         Redeem
       </Button>
-      <Button variant="contained" onClick={buy} disabled={isMarketClosed || !selectedAmount}>
+      <Button variant="contained" onClick={buy} disabled={isMarketClosed || !selectedAmount || isMarketExpired}>
         Buy
       </Button>
-      <Button variant="contained" onClick={sell} disabled={isMarketClosed || !selectedAmount}>
+      <Button variant="contained" onClick={sell} disabled={isMarketClosed || !selectedAmount || isMarketExpired}>
         Sell
       </Button>
     </div>
@@ -153,6 +160,7 @@ const Layout: React.FC<LayoutProps> = ({
   account,
   isConditionLoaded,
   isMarketClosed,
+  isMarketExpired,
   marketInfo,
   setSelectedAmount,
   selectedAmount,
@@ -169,9 +177,13 @@ const Layout: React.FC<LayoutProps> = ({
       {isConditionLoaded ? (
         <>
           <h2>{marketInfo.title}</h2>
-          <p>State: {marketInfo.stage}</p>
+          <Box direction={'row'} gap={'32px'} justify={'center'} align={'center'}>
+            <Text size={'16px'}>State: {marketInfo.stage}</Text>
+            <Text size={'16px'}>🕐 {' '} {moment(marketInfo.expirationTimestamp).format('MMM DD, YYYY')}</Text>
+          </Box>
           <TradingForm
             isMarketClosed={isMarketClosed}
+            isMarketExpired={isMarketExpired}
             marketInfo={marketInfo}
             setSelectedAmount={setSelectedAmount}
             setSelectedOutcomeToken={setSelectedOutcomeToken}
@@ -180,6 +192,7 @@ const Layout: React.FC<LayoutProps> = ({
           <TraderActions
             marketInfo={marketInfo}
             isMarketClosed={isMarketClosed}
+            isMarketExpired={isMarketExpired}
             selectedAmount={selectedAmount}
             redeem={redeem}
             buy={buy}

@@ -1,10 +1,11 @@
 {
-  "networkId": 1666600000,
-  "lmsrAddress": "0x0CC08b1CF6d18743AC63511F3EA028395C26D81c",
+  "networkId": 1726642451370,
+  "lmsrAddress": "0xDF9FD2e8Cf22F173168F320172bBBB29f6d6b011",
   "markets": [
     {
-      "questionId": "0xa068e7686c9e8b42cc69cc3cc15bd5cd46db968138ae24c626b6b2bb1a86b3b5",
-      "title": "Will Trump say 'Crypto/Bitcoin' during Nevada rally?",
+      "questionId": "0xc17b841e5abfac55f4ec7278a7e3d6164a35e348b1ac24c04b7eddea3b126fbe",
+      "title": "Will Trump say 'Crypto/Bitcoin' during the debates?",
+      "expirationTimestamp": 1727654400000,
       "outcomes": [
         {
           "title": "Yes",
@@ -15,7 +16,7 @@
           "short": "No"
         }
       ],
-      "imageUrl": "https://polymarket.com/_next/image?url=https%3A%2F%2Fpolymarket-upload.s3.us-east-2.amazonaws.com%2Fwhat-will-trump-say-during-nevada-rally-ZhQfdAgABNMF.jpg&w=600&q=100"
+      "imageUrl": "https://polymarket.com/_next/image?url=https%3A%2F%2Fpolymarket-upload.s3.us-east-2.amazonaws.com%2Fwhat-will-trump-say-during-michigan-rally-aYFXl7b0S2r8.jpg&w=256&q=100"
     }
   ],
   "network": "harmony"

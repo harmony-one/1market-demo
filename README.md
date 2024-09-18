@@ -6,6 +6,14 @@
 2. Change description and hash in <root>/`market.config.js`
 
 3. Redeploy the contract:
+
+Locally:
+```shell
+ganache-cli -d
+truffle migrate
+```
+
+On harmony network:
 ```shell
 truffle migrate --network harmony --reset
 ```
