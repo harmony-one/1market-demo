@@ -1,8 +1,9 @@
 import React from 'react'
-import { Paper, Button, TextField, RadioGroup, FormControlLabel, Radio } from '@material-ui/core'
+import { Paper, RadioGroup, FormControlLabel, Radio } from '@material-ui/core'
 import styles from '../style.module.css'
 import {Box, Text} from 'grommet'
 import moment from 'moment'
+import { Input, Button } from 'antd'
 
 type TradingFormProps = {
   isMarketClosed: boolean
@@ -60,15 +61,16 @@ const TradingForm: React.FC<TradingFormProps> = ({
   selectedOutcomeToken,
 }) => (
   <>
-    <div className={styles.inputContainer}>
-      <TextField
-        variant="filled"
-        label="Collateral value"
+    <Box margin={{ top: '40px' }} align={'start'}>
+      <Text weight={600}>Amount</Text>
+      <Input
+        size={'large'}
+        placeholder="0.00"
         type="number"
         onChange={e => setSelectedAmount(e.target.value)}
         disabled={isMarketClosed}
       />
-    </div>
+    </Box>
     <RadioGroup
       defaultValue={0}
       onChange={e => setSelectedOutcomeToken(parseInt(e.target.value))}
@@ -110,29 +112,41 @@ const TraderActions: React.FC<TraderActionsProps> = ({
   sell,
 }) => (
   <>
-    <h3>Trader actions:</h3>
-    <div className={styles.actions}>
+    <h3>Trader actions</h3>
+    <Box direction={'row'} justify={'center'} gap={'24px'}>
       <Button
-        variant="contained"
+        type={'primary'}
+        size={'large'}
         onClick={redeem}
         disabled={!isMarketClosed || !marketInfo.payoutDenominator}
+        style={{ width: '120px' }}
       >
         Redeem
       </Button>
-      <Button variant="contained" onClick={buy} disabled={isMarketClosed || !selectedAmount || isMarketExpired}>
+      <Button
+        type={'primary'}
+        size={'large'}
+        style={{ width: '120px' }}
+        onClick={buy} disabled={isMarketClosed || !selectedAmount || isMarketExpired}
+      >
         Buy
       </Button>
-      <Button variant="contained" onClick={sell} disabled={isMarketClosed || !selectedAmount || isMarketExpired}>
+      <Button
+        type={'primary'}
+        size={'large'}
+        style={{ width: '120px' }}
+        onClick={sell} disabled={isMarketClosed || !selectedAmount || isMarketExpired}
+      >
         Sell
       </Button>
-    </div>
+    </Box>
   </>
 )
 
 const OperatorActions: React.FC<OperatorActionsProps> = ({ isMarketClosed, close }) => (
   <>
-    <h3>Operator actions:</h3>
-    <Button variant="contained" onClick={close} disabled={isMarketClosed}>
+    <h3>Operator actions</h3>
+    <Button type={'primary'} size={'large'} onClick={close} disabled={isMarketClosed}>
       Close
     </Button>
   </>
@@ -140,12 +154,13 @@ const OperatorActions: React.FC<OperatorActionsProps> = ({ isMarketClosed, close
 
 const OracleActions: React.FC<OracleActionsProps> = ({ isMarketClosed, marketInfo, resolve }) => (
   <>
-    <h3>Oracle actions:</h3>
+    <h3>Oracle actions</h3>
     <div className={styles.actions}>
       {marketInfo.outcomes.map((outcome: any, index: number) => (
         <Button
           key={outcome.short}
-          variant="contained"
+          type={'primary'}
+          size={'large'}
           onClick={() => resolve(index)}
           disabled={!isMarketClosed}
         >

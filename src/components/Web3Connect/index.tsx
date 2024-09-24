@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import Web3Connect from 'web3connect'
-import Button from '@material-ui/core/Button'
+import { Button } from 'antd'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { getCurrentNetworkName } from 'src/utils/web3'
 import styles from '../style.module.css'
+import { Box, Text } from 'grommet'
 
 type Props = {
   account: string
@@ -58,17 +59,26 @@ const Web3ConnectButton: React.FC<Props> = ({ account, setProviderData }) => {
 
   return account ? (
     <div className={styles.header}>
-      <div className={styles.bold}>{getTypeOfAccount()}:</div>
-      <div>{account}</div>
+      <Box>
+        <Box width={'140px'}>
+          <Text size={'18px'} style={{
+            textOverflow: 'ellipsis',
+            overflow: 'hidden'
+          }}>{account}</Text>
+        </Box>
+        <Box>
+          <Text weight={500} size={'16px'}>{getTypeOfAccount()}</Text>
+        </Box>
+      </Box>
       <div>
-        <Button variant="contained" onClick={disconnectProvider}>
+        <Button type={'primary'} size={'large'} onClick={disconnectProvider}>
           Disconnect
         </Button>
       </div>
     </div>
   ) : (
-    <Button variant="contained" onClick={() => web3Connect.toggleModal()}>
-      Connect
+    <Button type={'primary'} size={'large'} onClick={() => web3Connect.toggleModal()}>
+      Connect Wallet
     </Button>
   )
 }
