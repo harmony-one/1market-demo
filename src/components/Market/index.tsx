@@ -20,6 +20,14 @@ enum MarketStage {
   Closed = 2,
 }
 
+export interface MarketOutcome {
+  index: number
+  title: string
+  probability: string,
+  balance: BigNumber,
+  payoutNumerator: any,
+}
+
 let conditionalTokensRepo: any
 let marketMakersRepo: any
 
@@ -74,7 +82,7 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
         outcomeIndex,
       )
 
-      const outcome = {
+      const outcome: MarketOutcome = {
         index: outcomeIndex,
         title: markets.markets[0].outcomes[outcomeIndex].title,
         probability: new BigNumber(probability)
@@ -101,7 +109,7 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
     setMarketInfo(marketData)
   }
 
-  const buy = async () => {
+  const buy = async (outcomeToken = selectedOutcomeToken) => {
     const collateral = await marketMakersRepo.getCollateralToken()
     const formatedAmount = new BigNumber(selectedAmount).multipliedBy(
       new BigNumber(Math.pow(10, collateral.decimals)),
@@ -110,7 +118,7 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
     const outcomeTokenAmounts = Array.from(
       { length: marketInfo.outcomes.length },
       (value: any, index: number) =>
-        index === selectedOutcomeToken ? formatedAmount : new BigNumber(0),
+        index === outcomeToken ? formatedAmount : new BigNumber(0),
     )
 
     const cost = await marketMakersRepo.calcNetCost(outcomeTokenAmounts)
@@ -129,7 +137,7 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
     await getMarketInfo()
   }
 
-  const sell = async () => {
+  const sell = async (outcomeToken = selectedOutcomeToken) => {
     const collateral = await marketMakersRepo.getCollateralToken()
     const formatedAmount = new BigNumber(selectedAmount).multipliedBy(
       new BigNumber(Math.pow(10, collateral.decimals)),
@@ -141,7 +149,7 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
     }
 
     const outcomeTokenAmounts = Array.from({ length: marketInfo.outcomes.length }, (v, i) =>
-      i === selectedOutcomeToken ? formatedAmount.negated() : new BigNumber(0),
+      i === outcomeToken ? formatedAmount.negated() : new BigNumber(0),
     )
     const profit = (await marketMakersRepo.calcNetCost(outcomeTokenAmounts)).neg()
 
