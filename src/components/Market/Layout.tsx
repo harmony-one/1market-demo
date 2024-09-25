@@ -102,12 +102,12 @@ const TradingForm: React.FC<TradingFormProps> = ({
   const items: TabsProps['items'] = [
     {
       key: 'buy',
-      label: 'Buy',
+      label: <Text size={'16px'} weight={500}>Buy</Text>,
       children: null,
     },
     {
       key: 'sell',
-      label: 'Sell',
+      label: <Text size={'16px'} weight={500}>Sell</Text>,
       children: null,
     }
   ];
@@ -134,7 +134,7 @@ const TradingForm: React.FC<TradingFormProps> = ({
 
   return <>
     <Tabs defaultActiveKey="1" size={'large'} items={items} onChange={onChangeTab} />
-    <Box margin={{ top: '40px' }} align={'start'} gap={'4px'}>
+    <Box margin={{ top: '16px' }} align={'start'} gap={'4px'}>
       <Text weight={500} size={'16px'}>Amount</Text>
       <Input
         size={'large'}
@@ -240,7 +240,7 @@ const OperatorActions: React.FC<OperatorActionsProps> = ({ isMarketClosed, close
   <>
     <h3>Operator actions</h3>
     <Button type={'primary'} size={'large'} onClick={close} disabled={isMarketClosed}>
-      Close
+      Close the Market
     </Button>
   </>
 )
