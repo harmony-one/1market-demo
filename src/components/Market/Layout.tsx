@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Paper, RadioGroup, FormControlLabel, Radio } from '@material-ui/core'
 import styles from '../style.module.css'
 import {Box, Text} from 'grommet'
 import moment from 'moment'
@@ -308,7 +307,14 @@ const Layout: React.FC<LayoutProps> = ({
   resolve,
 }) => {
   return (
-    <Paper className={styles.condition}>
+    <Box
+      background={'widgetBg'}
+      border={{
+        color: 'border'
+      }}
+      round={'5px'}
+      className={styles.condition}
+    >
       {isConditionLoaded ? (
         <>
           <h2>{marketInfo.title}</h2>
@@ -351,7 +357,7 @@ const Layout: React.FC<LayoutProps> = ({
       ) : (
         <div>Loading...</div>
       )}
-    </Paper>
+    </Box>
   )
 }
 
