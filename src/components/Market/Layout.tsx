@@ -11,11 +11,13 @@ type TradingFormProps = {
   isMarketClosed: boolean
   isMarketExpired: boolean
   marketInfo: any
+  selectedAmount: string
   setSelectedAmount: any
   setSelectedOutcomeToken: any
   selectedOutcomeToken: number
   buy: any
   sell: any
+  redeem: any
 }
 
 type TraderActionsProps = {
@@ -60,6 +62,7 @@ type OpType = 'buy' | 'sell'
 
 const VoteButtonContainer = styled(Box)<{
   isPositive: boolean
+  isDisabled: boolean
 }>`
     min-width: 150px;
     transition: background-color 250ms;
@@ -72,18 +75,26 @@ const VoteButtonContainer = styled(Box)<{
 const VoteButton = (props: {
   text: string
   isPositive: boolean
+  isDisabled: boolean
   onClick: () => void
 }) => {
   return <VoteButtonContainer
     isPositive={props.isPositive}
+    isDisabled={props.isDisabled}
     pad={'12px'}
     round={'5px'}
     align={'center'}
     background={props.isPositive ? 'positiveBg2' : 'negativeBg2'}
-    onClick={props.onClick}
+    onClick={props.isDisabled ? undefined : props.onClick}
     gap={'4px'}
+    style={{
+      opacity: props.isDisabled ? 0.6 : 1,
+      cursor: props.isDisabled ? 'default' : 'pointer',
+    }}
   >
-    <Text color={'white'} size={'16px'} weight={500}>{props.text}</Text>
+    <Text color={'white'} size={'16px'} weight={500}>
+      {props.text}
+    </Text>
   </VoteButtonContainer>
 }
 
@@ -91,11 +102,13 @@ const TradingForm: React.FC<TradingFormProps> = ({
   isMarketClosed,
   isMarketExpired,
   marketInfo,
+  selectedAmount,
   setSelectedAmount,
   setSelectedOutcomeToken,
   selectedOutcomeToken,
   buy,
-  sell
+  sell,
+  redeem
 }) => {
   const [opType, setOpType] = useState<OpType>('buy')
 
@@ -148,6 +161,7 @@ const TradingForm: React.FC<TradingFormProps> = ({
       <Box align={'center'} gap={'4px'}>
         <VoteButton
           isPositive={true}
+          isDisabled={isMarketClosed || !selectedAmount || isMarketExpired}
           text={`Yes ${marketInfo.outcomes[0].probability.toString()}%`}
           // outcome={marketInfo.outcomes[0]}
           onClick={onYesClicked}
@@ -157,11 +171,24 @@ const TradingForm: React.FC<TradingFormProps> = ({
       <Box align={'center'} gap={'4px'}>
         <VoteButton
           isPositive={false}
+          isDisabled={isMarketClosed || !selectedAmount || isMarketExpired}
           text={`No ${marketInfo.outcomes[1].probability.toString()}%`}
           // outcome={marketInfo.outcomes[1]}
           onClick={onNoClicked}
         />
         <Text>My balance: {marketInfo.outcomes[1].balance.toFixed(5).toString()}</Text>
+      </Box>
+    </Box>
+    <Box align={'center'} margin={{ top: '24px' }}>
+      <Box width={'200px'}>
+        <Button
+          type={'primary'}
+          size={'large'}
+          disabled={!isMarketClosed || !marketInfo.payoutDenominator}
+          onClick={redeem}
+        >
+          Redeem
+        </Button>
       </Box>
     </Box>
     {/*<RadioGroup*/}
@@ -216,22 +243,22 @@ const TraderActions: React.FC<TraderActionsProps> = ({
       >
         Redeem
       </Button>
-      {/*<Button*/}
-      {/*  type={'primary'}*/}
-      {/*  size={'large'}*/}
-      {/*  style={{ width: '120px' }}*/}
-      {/*  onClick={buy} disabled={isMarketClosed || !selectedAmount || isMarketExpired}*/}
-      {/*>*/}
-      {/*  Buy*/}
-      {/*</Button>*/}
-      {/*<Button*/}
-      {/*  type={'primary'}*/}
-      {/*  size={'large'}*/}
-      {/*  style={{ width: '120px' }}*/}
-      {/*  onClick={sell} disabled={isMarketClosed || !selectedAmount || isMarketExpired}*/}
-      {/*>*/}
-      {/*  Sell*/}
-      {/*</Button>*/}
+      <Button
+        type={'primary'}
+        size={'large'}
+        style={{ width: '120px' }}
+        onClick={buy} disabled={isMarketClosed || !selectedAmount || isMarketExpired}
+      >
+        Buy
+      </Button>
+      <Button
+        type={'primary'}
+        size={'large'}
+        style={{ width: '120px' }}
+        onClick={sell} disabled={isMarketClosed || !selectedAmount || isMarketExpired}
+      >
+        Sell
+      </Button>
     </Box>
   </>
 )
@@ -293,21 +320,23 @@ const Layout: React.FC<LayoutProps> = ({
             isMarketClosed={isMarketClosed}
             isMarketExpired={isMarketExpired}
             marketInfo={marketInfo}
+            selectedAmount={selectedAmount}
             setSelectedAmount={setSelectedAmount}
             setSelectedOutcomeToken={setSelectedOutcomeToken}
             selectedOutcomeToken={selectedOutcomeToken}
             buy={buy}
             sell={sell}
-          />
-          <TraderActions
-            marketInfo={marketInfo}
-            isMarketClosed={isMarketClosed}
-            isMarketExpired={isMarketExpired}
-            selectedAmount={selectedAmount}
             redeem={redeem}
-            buy={buy}
-            sell={sell}
           />
+          {/*<TraderActions*/}
+          {/*  marketInfo={marketInfo}*/}
+          {/*  isMarketClosed={isMarketClosed}*/}
+          {/*  isMarketExpired={isMarketExpired}*/}
+          {/*  selectedAmount={selectedAmount}*/}
+          {/*  redeem={redeem}*/}
+          {/*  buy={buy}*/}
+          {/*  sell={sell}*/}
+          {/*/>*/}
           {account === process.env.REACT_APP_OPERATOR_ADDRESS && (
             <OperatorActions isMarketClosed={isMarketClosed} close={close} />
           )}
