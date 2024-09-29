@@ -180,7 +180,7 @@ const TradingForm: React.FC<TradingFormProps> = ({
       </Box>
     </Box>
     <Box align={'center'} margin={{ top: '24px' }}>
-      <Box width={'200px'}>
+      <Box width={'140px'}>
         <Button
           type={'primary'}
           size={'large'}
