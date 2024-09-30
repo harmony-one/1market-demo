@@ -160,7 +160,7 @@ const TradingForm: React.FC<TradingFormProps> = ({
       <Box align={'center'} gap={'4px'}>
         <VoteButton
           isPositive={true}
-          isDisabled={isMarketClosed || !selectedAmount || isMarketExpired}
+          isDisabled={isMarketClosed || !selectedAmount}
           text={`Yes ${marketInfo.outcomes[0].probability.toString()}%`}
           // outcome={marketInfo.outcomes[0]}
           onClick={onYesClicked}
@@ -170,7 +170,7 @@ const TradingForm: React.FC<TradingFormProps> = ({
       <Box align={'center'} gap={'4px'}>
         <VoteButton
           isPositive={false}
-          isDisabled={isMarketClosed || !selectedAmount || isMarketExpired}
+          isDisabled={isMarketClosed || !selectedAmount}
           text={`No ${marketInfo.outcomes[1].probability.toString()}%`}
           // outcome={marketInfo.outcomes[1]}
           onClick={onNoClicked}
