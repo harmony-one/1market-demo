@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styles from '../style.module.css'
 import {Box, Text} from 'grommet'
 import moment from 'moment'
+import { Tag } from 'antd'
 import { Input, Button, Tabs, TabsProps } from 'antd'
 import styled from "styled-components";
 
@@ -265,9 +266,11 @@ const TraderActions: React.FC<TraderActionsProps> = ({
 const OperatorActions: React.FC<OperatorActionsProps> = ({ isMarketClosed, close }) => (
   <>
     <h3>Operator actions</h3>
-    <Button type={'primary'} size={'large'} onClick={close} disabled={isMarketClosed}>
-      Close the Market
-    </Button>
+    <Box align={'center'}>
+      <Button type={'primary'} size={'large'} onClick={close} disabled={isMarketClosed}>
+        Close the Market
+      </Button>
+    </Box>
   </>
 )
 
@@ -281,9 +284,9 @@ const OracleActions: React.FC<OracleActionsProps> = ({ isMarketClosed, marketInf
           type={'primary'}
           size={'large'}
           onClick={() => resolve(index)}
-          disabled={!isMarketClosed}
+          disabled={isMarketClosed}
         >
-          Resolve {outcome.title}
+          Resolve "{outcome.title}"
         </Button>
       ))}
     </div>
@@ -319,7 +322,9 @@ const Layout: React.FC<LayoutProps> = ({
         <>
           <h2>{marketInfo.title}</h2>
           <Box direction={'row'} gap={'32px'} justify={'center'} align={'center'}>
-            <Text size={'16px'}>State: {marketInfo.stage}</Text>
+            <Tag color={marketInfo.stage === 'Running' ? 'success' : 'default'}>
+              <Text size={'16px'}>{marketInfo.stage}</Text>
+            </Tag>
             <Text size={'16px'}>🕐 {' '} {moment(marketInfo.expirationTimestamp).format('MMM DD, YYYY')}</Text>
           </Box>
           <TradingForm
