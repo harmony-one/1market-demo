@@ -1,11 +1,11 @@
 {
   "networkId": 1666600000,
-  "lmsrAddress": "0xB3150bc81c57D7b54C5a44335C0c9BbEf9775a3E",
+  "lmsrAddress": "0xE8F737D38b638294C1cBa002A8F60Cd025F76DB2",
   "markets": [
     {
-      "questionId": "0xaf059c0b6f4240c42ca400d978120524f90eb585c79b171e39360ab792d6233b",
+      "questionId": "0x4019d230428b2490a17046cab81ad2ccddd4b942d2f8d53bd25a72105011ec3c",
       "title": "Will Trump say 'Crypto/Bitcoin' during the debates?",
-      "expirationTimestamp": 1727654400000,
+      "expirationTimestamp": 1730332800000,
       "outcomes": [
         {
           "title": "Yes",

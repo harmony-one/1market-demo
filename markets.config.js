@@ -1,8 +1,8 @@
 module.exports = [
   {
-    questionId: "0xaf059c0b6f4240c42ca400d978120524f90eb585c79b171e39360ab792d6233b",
+    questionId: "0x4019d230428b2490a17046cab81ad2ccddd4b942d2f8d53bd25a72105011ec3c",
     title: "Will Trump say 'Crypto/Bitcoin' during the debates?",
-    expirationTimestamp: Date.parse('30 Sep 2024 00:00:00 GMT').valueOf(),
+    expirationTimestamp: Date.parse('31 Oct 2024 00:00:00 GMT').valueOf(),
     outcomes: [
       {
         title: "Yes",
