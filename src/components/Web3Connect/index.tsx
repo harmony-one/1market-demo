@@ -5,6 +5,9 @@ import WalletConnectProvider from '@walletconnect/web3-provider'
 import { getCurrentNetworkName } from 'src/utils/web3'
 import styles from '../style.module.css'
 import { Box, Text } from 'grommet'
+import { toHex } from 'web3-utils'
+
+const networkId = process.env.REACT_APP_NETWORK_ID && parseInt(process.env.REACT_APP_NETWORK_ID)
 
 type Props = {
   account: string
@@ -77,7 +80,21 @@ const Web3ConnectButton: React.FC<Props> = ({ account, setProviderData }) => {
       </div>
     </div>
   ) : (
-    <Button type={'primary'} size={'large'} onClick={() => web3Connect.toggleModal()}>
+    <Button type={'primary'} size={'large'} onClick={async () => {
+      try {
+        if(window.ethereum) {
+          if(window.ethereum.networkVersion !== networkId && networkId) {
+            await window.ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: toHex(networkId as number) }]
+            });
+          }
+        }
+      } catch (e) {
+        console.error('Failed to switch network', e)
+      }
+      await web3Connect.toggleModal()
+    }}>
       Connect Wallet
     </Button>
   )
