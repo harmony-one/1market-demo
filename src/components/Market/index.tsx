@@ -119,7 +119,7 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
       { length: marketInfo.outcomes.length },
       (value: any, index: number) =>
         index === outcomeToken ? formatedAmount : new BigNumber(0),
-    )
+    ).map(item => item.toString())
 
     const cost = await marketMakersRepo.calcNetCost(outcomeTokenAmounts)
 
@@ -150,7 +150,7 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
 
     const outcomeTokenAmounts = Array.from({ length: marketInfo.outcomes.length }, (v, i) =>
       i === outcomeToken ? formatedAmount.negated() : new BigNumber(0),
-    )
+    ).map(item => item.toString())
     const profit = (await marketMakersRepo.calcNetCost(outcomeTokenAmounts)).neg()
 
     const tx = await marketMakersRepo.trade(outcomeTokenAmounts, profit, account)
