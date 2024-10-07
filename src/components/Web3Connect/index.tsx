@@ -80,7 +80,11 @@ const Web3ConnectButton: React.FC<Props> = ({ account, setProviderData }) => {
       </div>
     </div>
   ) : (
-    <Button type={'primary'} size={'large'} onClick={async () => {
+    <Button
+      type={'primary'}
+      size={'large'}
+      disabled={!window.ethereum}
+      onClick={async () => {
       try {
         if(window.ethereum) {
           if(window.ethereum.networkVersion !== networkId && networkId) {
@@ -95,7 +99,7 @@ const Web3ConnectButton: React.FC<Props> = ({ account, setProviderData }) => {
       }
       await web3Connect.toggleModal()
     }}>
-      Connect Wallet
+      {window.ethereum ? 'Connect Wallet' : 'Install MetaMask'}
     </Button>
   )
 }
