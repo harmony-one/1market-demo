@@ -7,6 +7,6 @@ export const MainContent = () => {
   const { state: { web3, account } } = useOneMarket()
 
   return <Box>
-    {web3 && account && <Market web3={web3} account={account} />}
+    {web3 && <Market web3={web3} account={account} />}
   </Box>
 }

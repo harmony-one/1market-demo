@@ -6,6 +6,7 @@ import { getCurrentNetworkName } from 'src/utils/web3'
 import styles from '../style.module.css'
 import { Box, Text } from 'grommet'
 import { toHex } from 'web3-utils'
+import { DefaultProvider } from '../../provider/DataProvider'
 
 const networkId = process.env.REACT_APP_NETWORK_ID && parseInt(process.env.REACT_APP_NETWORK_ID)
 
@@ -30,7 +31,7 @@ const web3Connect = new Web3Connect.Core({
 
 const Web3ConnectButton: React.FC<Props> = ({ account, setProviderData }) => {
   const connectProvider = (provider: any) => setProviderData(provider)
-  const disconnectProvider = () => setProviderData()
+  const disconnectProvider = () => setProviderData(DefaultProvider)
 
   useEffect(() => {
     if (!web3ConnectListenersAdded) {

@@ -1,5 +1,11 @@
 import React, {createContext, useContext, useState, PropsWithChildren, useEffect, useMemo} from 'react';
 import Web3 from 'web3'
+const marketsConfig = require('src/conf/config.local.json')
+
+// Set "null" for local deployment:
+export const DefaultProvider = marketsConfig.networkId === 1666600000
+  ? new Web3(new Web3.providers.HttpProvider('https://api.harmony.one'))
+  : null
 
 export interface OneMarketState {
   web3: Web3 | null
@@ -14,7 +20,7 @@ export interface OneMarketContextState {
 const getInitialState = (): OneMarketContextState => {
   return {
     state: {
-      web3: null,
+      web3: DefaultProvider,
       account: '',
     },
     setState: () => {}
@@ -28,18 +34,6 @@ export const useOneMarket = () => useContext(UserDataContext);
 
 export const OneMarketDataProvider: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   const [ oneMarketState, setOneMarketState ] = useState<OneMarketState>(defaultState.state)
-
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-
-      } catch (e) {
-        console.error('Failed to load data:', e)
-      }
-    }
-
-    loadData()
-  }, []);
 
   return <UserDataContext.Provider value={{
     state: oneMarketState,

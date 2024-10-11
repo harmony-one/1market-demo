@@ -76,7 +76,7 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
       )
       const positionId = getPositionId(collateral.address, collectionId)
       const probability = await marketMakersRepo.calcMarginalPrice(outcomeIndex)
-      const balance = await conditionalTokensRepo.balanceOf(account, positionId)
+      const balance = account ? await conditionalTokensRepo.balanceOf(account, positionId) : '0'
       const payoutNumerator = await conditionalTokensRepo.payoutNumerators(
         conditionId,
         outcomeIndex,
@@ -198,7 +198,7 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
   }
 
   const isMarketClosed =
-    isConditionLoaded && MarketStage[marketInfo.stage].toString() === MarketStage.Closed.toString()
+    marketInfo && isConditionLoaded && MarketStage[marketInfo.stage].toString() === MarketStage.Closed.toString()
   const isMarketExpired = marketInfo && Date.now() > marketInfo.expirationTimestamp
   return (
     <Layout
