@@ -52,15 +52,26 @@ const loadContracts = async (web3: any, lmsrAddress: string, account: string) =>
       providerAccountCache = account
       lmsrAddressCache = lmsrAddress
 
-      const LMSRMarketMakerContract = await loadLMSRMarketMakerContract(web3)
-      const ConditionalTokensContract = await loadConditionalTokensContract(web3)
-      const WETH9Contract = await loadWETH9Contract(web3)
+      const [
+        LMSRMarketMakerContract,
+        ConditionalTokensContract,
+        WETH9Contract,
+      ] = await Promise.all([
+        loadLMSRMarketMakerContract(web3),
+        loadConditionalTokensContract(web3),
+        loadWETH9Contract(web3),
+      ])
+
+      // const LMSRMarketMakerContract = await loadLMSRMarketMakerContract(web3)
+      // const ConditionalTokensContract = await loadConditionalTokensContract(web3)
+      // const WETH9Contract = await loadWETH9Contract(web3)
 
       const lmsrMarketMaker = await LMSRMarketMakerContract.at(lmsrAddress)
       const conditionalTokens = await ConditionalTokensContract.at(await lmsrMarketMaker.pmSystem())
+      const collateralTokenAddress = await lmsrMarketMaker.collateralToken()
       const collateralToken = {
-        address: await lmsrMarketMaker.collateralToken(),
-        contract: await WETH9Contract.at(await lmsrMarketMaker.collateralToken()),
+        address: collateralTokenAddress,
+        contract: await WETH9Contract.at(collateralTokenAddress),
         name: 'Wrapped Ether',
         decimals: 18,
         symbol: 'WETH',

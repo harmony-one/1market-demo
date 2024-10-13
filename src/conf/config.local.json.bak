@@ -1,10 +1,11 @@
 {
-  "networkId": 1581350973751,
-  "lmsrAddress": "0xDF9FD2e8Cf22F173168F320172bBBB29f6d6b011",
+  "networkId": 1666600000,
+  "lmsrAddress": "0xB3150bc81c57D7b54C5a44335C0c9BbEf9775a3E",
   "markets": [
     {
-      "questionId": "0x4b22fe478b95fdaa835ddddf631ab29f12900b62061e0c5fd8564ddb7b684333",
-      "title": "Will the summer 2020 in Germany break again weather records? ",
+      "questionId": "0xaf059c0b6f4240c42ca400d978120524f90eb585c79b171e39360ab792d6233b",
+      "title": "Will Trump say 'Crypto/Bitcoin' during the debates?",
+      "expirationTimestamp": 1727654400000,
       "outcomes": [
         {
           "title": "Yes",
@@ -14,8 +15,9 @@
           "title": "No",
           "short": "No"
         }
-      ]
+      ],
+      "imageUrl": "https://polymarket.com/_next/image?url=https%3A%2F%2Fpolymarket-upload.s3.us-east-2.amazonaws.com%2Fwhat-will-trump-say-during-michigan-rally-aYFXl7b0S2r8.jpg&w=256&q=100"
     }
   ],
-  "network": "local"
+  "network": "harmony"
 }

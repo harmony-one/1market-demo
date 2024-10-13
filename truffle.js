@@ -21,20 +21,20 @@ const path = require('path')
 require('dotenv').config()
 
 const HDWalletProvider = require('@truffle/hdwallet-provider')
-const mnemonic = process.env.REACT_APP_OPERATOR_MNEMONIC || 'myth like bonus scare over problem client lizard pioneer submit female collect'
+const privateKey = process.env.REACT_APP_OPERATOR_PK || ''
 
-const createInfuraEntry = (networkName, networkId, gasPrice) => ({
-  [networkName]: {
-    provider: () =>
-      new HDWalletProvider(
-        mnemonic,
-        `https://${networkName}.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`
-      ),
-    network_id: networkId,
-    gasPrice,
-    skipDryRun: true
-  }
-})
+// const createInfuraEntry = (networkName, networkId, gasPrice) => ({
+//   [networkName]: {
+//     provider: () =>
+//       new HDWalletProvider(
+//         mnemonic,
+//         `https://${networkName}.infura.io/v3/${process.env.REACT_APP_INFURA_ID}`
+//       ),
+//     network_id: networkId,
+//     gasPrice,
+//     skipDryRun: true
+//   }
+// })
 
 module.exports = {
   contracts_build_directory: path.join(__dirname, './src/abi'),
@@ -55,15 +55,23 @@ module.exports = {
         host: '127.0.0.1',
         port: 8545,
         network_id: '*',
-      }
+      },
+      harmony: {
+        provider: () => new HDWalletProvider(privateKey, `https://api.harmony.one`),
+        network_id: 1666600000,
+        gas: 5500000,        // Block limit
+        confirmations: 1,    // # of confs to wait between deployments. (default: 0)
+        timeoutBlocks: 50,  // # of blocks before a deployment times out  (minimum/default: 50)
+        skipDryRun: false     // Skip dry run before migrations? (default: false for public nets )
+        },
     },
-    ...[
-      ['mainnet', '1', 10000000002],
-      ['ropsten', '3'],
-      ['rinkeby', '4', 3e9],
-      ['goerli', '5', 1e9],
-      ['kovan', '42']
-    ].map(data => createInfuraEntry(...data))
+    // ...[
+    //   ['mainnet', '1', 10000000002],
+    //   ['ropsten', '3'],
+    //   ['rinkeby', '4', 3e9],
+    //   ['goerli', '5', 1e9],
+    //   ['kovan', '42']
+    // ].map(data => createInfuraEntry(...data))
 
     // Another network with more advanced options...
     // advanced: {

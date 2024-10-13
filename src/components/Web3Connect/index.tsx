@@ -1,9 +1,14 @@
 import React, { useEffect } from 'react'
 import Web3Connect from 'web3connect'
-import Button from '@material-ui/core/Button'
+import { Button } from 'antd'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { getCurrentNetworkName } from 'src/utils/web3'
 import styles from '../style.module.css'
+import { Box, Text } from 'grommet'
+import { toHex } from 'web3-utils'
+import { DefaultProvider } from '../../provider/DataProvider'
+
+const networkId = process.env.REACT_APP_NETWORK_ID && parseInt(process.env.REACT_APP_NETWORK_ID)
 
 type Props = {
   account: string
@@ -13,7 +18,7 @@ type Props = {
 let web3ConnectListenersAdded = false
 
 const web3Connect = new Web3Connect.Core({
-  network: getCurrentNetworkName() || 'rinkeby',
+  network: getCurrentNetworkName() || 'harmony',
   providerOptions: {
     walletconnect: {
       package: WalletConnectProvider,
@@ -26,7 +31,7 @@ const web3Connect = new Web3Connect.Core({
 
 const Web3ConnectButton: React.FC<Props> = ({ account, setProviderData }) => {
   const connectProvider = (provider: any) => setProviderData(provider)
-  const disconnectProvider = () => setProviderData()
+  const disconnectProvider = () => setProviderData(DefaultProvider)
 
   useEffect(() => {
     if (!web3ConnectListenersAdded) {
@@ -58,17 +63,44 @@ const Web3ConnectButton: React.FC<Props> = ({ account, setProviderData }) => {
 
   return account ? (
     <div className={styles.header}>
-      <div className={styles.bold}>{getTypeOfAccount()}:</div>
-      <div>{account}</div>
+      <Box>
+        <Box width={'140px'}>
+          <Text size={'18px'} style={{
+            textOverflow: 'ellipsis',
+            overflow: 'hidden'
+          }}>{account}</Text>
+        </Box>
+        <Box>
+          <Text weight={500} size={'16px'}>{getTypeOfAccount()}</Text>
+        </Box>
+      </Box>
       <div>
-        <Button variant="contained" onClick={disconnectProvider}>
+        <Button type={'primary'} size={'large'} onClick={disconnectProvider}>
           Disconnect
         </Button>
       </div>
     </div>
   ) : (
-    <Button variant="contained" onClick={() => web3Connect.toggleModal()}>
-      Connect
+    <Button
+      type={'primary'}
+      size={'large'}
+      disabled={!window.ethereum}
+      onClick={async () => {
+      try {
+        if(window.ethereum) {
+          if(window.ethereum.networkVersion !== networkId && networkId) {
+            await window.ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: toHex(networkId as number) }]
+            });
+          }
+        }
+      } catch (e) {
+        console.error('Failed to switch network', e)
+      }
+      await web3Connect.toggleModal()
+    }}>
+      {window.ethereum ? 'Connect Wallet' : 'Install MetaMask'}
     </Button>
   )
 }
