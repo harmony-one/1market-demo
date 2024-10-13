@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import styles from '../style.module.css'
-import {Box, Text} from 'grommet'
+import { Box, Spinner, Text } from 'grommet'
 import moment from 'moment'
-import { Tag } from 'antd'
+import { Spin, Tag } from 'antd'
 import { Input, Button, Tabs, TabsProps } from 'antd'
 import styled from "styled-components";
+import { VoteType } from './index'
 
 
 type TradingFormProps = {
@@ -16,6 +17,7 @@ type TradingFormProps = {
   setSelectedAmount: any
   setSelectedOutcomeToken: any
   selectedOutcomeToken: number
+  voteInProgress: VoteType
   buy: any
   sell: any
   redeem: any
@@ -52,6 +54,7 @@ type LayoutProps = {
   selectedAmount: string
   setSelectedOutcomeToken: any
   selectedOutcomeToken: number
+  voteInProgress: VoteType
   buy: any
   sell: any
   redeem: any
@@ -65,6 +68,7 @@ const VoteButtonContainer = styled(Box)<{
   isPositive: boolean
   isDisabled: boolean
 }>`
+    min-height: 48px;
     min-width: 150px;
     transition: background-color 250ms;
     cursor: pointer;
@@ -77,23 +81,30 @@ const VoteButton = (props: {
   text: string
   isPositive: boolean
   isDisabled: boolean
+  isLoading: boolean
   onClick: () => void
 }) => {
+  const { isLoading = false } = props
   return <VoteButtonContainer
     isPositive={props.isPositive}
     isDisabled={props.isDisabled}
-    pad={'12px'}
+    direction={'row'}
+    pad={'12px 16px'}
     round={'5px'}
     align={'center'}
+    justify={'center'}
+    gap={'8px'}
     background={props.isPositive ? 'positiveBg2' : 'negativeBg2'}
     onClick={props.isDisabled ? undefined : props.onClick}
-    gap={'4px'}
     style={{
-      opacity: props.isDisabled ? 0.6 : 1,
+      opacity: props.isDisabled ? 0.4 : 1,
       cursor: props.isDisabled ? 'default' : 'pointer',
     }}
   >
-    <Text color={'white'} size={'16px'} weight={500}>
+    {isLoading &&
+      <Spinner width={'1px'} />
+    }
+    <Text color={'white'} size={'18px'} weight={500}>
       {props.text}
     </Text>
   </VoteButtonContainer>
@@ -108,6 +119,7 @@ const TradingForm: React.FC<TradingFormProps> = ({
   setSelectedAmount,
   setSelectedOutcomeToken,
   selectedOutcomeToken,
+  voteInProgress,
   buy,
   sell,
   redeem
@@ -163,7 +175,8 @@ const TradingForm: React.FC<TradingFormProps> = ({
       <Box align={'center'} gap={'4px'}>
         <VoteButton
           isPositive={true}
-          isDisabled={isMarketClosed || !selectedAmount || !account}
+          isDisabled={isMarketClosed || !selectedAmount || !account || voteInProgress !== null}
+          isLoading={voteInProgress === 'buy'}
           text={`Yes ${marketInfo.outcomes[0].probability.toString()}%`}
           // outcome={marketInfo.outcomes[0]}
           onClick={onYesClicked}
@@ -173,7 +186,8 @@ const TradingForm: React.FC<TradingFormProps> = ({
       <Box align={'center'} gap={'4px'}>
         <VoteButton
           isPositive={false}
-          isDisabled={isMarketClosed || !selectedAmount || !account}
+          isDisabled={isMarketClosed || !selectedAmount || !account || voteInProgress !== null}
+          isLoading={voteInProgress === 'sell'}
           text={`No ${marketInfo.outcomes[1].probability.toString()}%`}
           // outcome={marketInfo.outcomes[1]}
           onClick={onNoClicked}
@@ -312,6 +326,7 @@ const Layout: React.FC<LayoutProps> = ({
   selectedAmount,
   setSelectedOutcomeToken,
   selectedOutcomeToken,
+  voteInProgress,
   buy,
   sell,
   redeem,
@@ -345,6 +360,7 @@ const Layout: React.FC<LayoutProps> = ({
             setSelectedAmount={setSelectedAmount}
             setSelectedOutcomeToken={setSelectedOutcomeToken}
             selectedOutcomeToken={selectedOutcomeToken}
+            voteInProgress={voteInProgress}
             buy={buy}
             sell={sell}
             redeem={redeem}

@@ -28,6 +28,8 @@ export interface MarketOutcome {
   payoutNumerator: any,
 }
 
+export type VoteType = null | 'buy' | 'sell'
+
 let conditionalTokensRepo: any
 let marketMakersRepo: any
 
@@ -36,10 +38,12 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
   const [selectedAmount, setSelectedAmount] = useState<string>('')
   const [selectedOutcomeToken, setSelectedOutcomeToken] = useState<number>(0)
   const [marketInfo, setMarketInfo] = useState<any>(undefined)
+  const [voteInProgress, setVoteInProgress] = useState<VoteType>(null)
 
   useEffect(() => {
     const init = async () => {
       try {
+        setIsConditionLoaded(false)
         conditionalTokensRepo = await loadConditionalTokensRepo(web3, markets.lmsrAddress, account)
         marketMakersRepo = await loadMarketMakersRepo(web3, markets.lmsrAddress, account)
         await getMarketInfo()
@@ -51,7 +55,7 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
     }
 
     init()
-  }, [])
+  }, [web3])
 
   const getMarketInfo = async () => {
     if (!process.env.REACT_APP_ORACLE_ADDRESS) return
@@ -110,53 +114,67 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
   }
 
   const buy = async (outcomeToken = selectedOutcomeToken) => {
-    const collateral = await marketMakersRepo.getCollateralToken()
-    const formatedAmount = new BigNumber(selectedAmount).multipliedBy(
-      new BigNumber(Math.pow(10, collateral.decimals)),
-    )
+    try {
+      setVoteInProgress('buy')
+      const collateral = await marketMakersRepo.getCollateralToken()
+      const formatedAmount = new BigNumber(selectedAmount).multipliedBy(
+        new BigNumber(Math.pow(10, collateral.decimals)),
+      )
 
-    const outcomeTokenAmounts = Array.from(
-      { length: marketInfo.outcomes.length },
-      (value: any, index: number) =>
-        index === outcomeToken ? formatedAmount : new BigNumber(0),
-    ).map(item => item.toString())
+      const outcomeTokenAmounts = Array.from(
+        { length: marketInfo.outcomes.length },
+        (value: any, index: number) =>
+          index === outcomeToken ? formatedAmount : new BigNumber(0),
+      ).map(item => item.toString())
 
-    const cost = await marketMakersRepo.calcNetCost(outcomeTokenAmounts)
+      const cost = await marketMakersRepo.calcNetCost(outcomeTokenAmounts)
 
-    const collateralBalance = await collateral.contract.balanceOf(account)
-    if (cost.gt(collateralBalance)) {
-      await collateral.contract.deposit({ value: formatedAmount.toString(), from: account })
-      await collateral.contract.approve(marketInfo.lmsrAddress, formatedAmount.toString(), {
-        from: account,
-      })
+      const collateralBalance = await collateral.contract.balanceOf(account)
+      if (cost.gt(collateralBalance)) {
+        await collateral.contract.deposit({ value: formatedAmount.toString(), from: account })
+        await collateral.contract.approve(marketInfo.lmsrAddress, formatedAmount.toString(), {
+          from: account,
+        })
+      }
+
+      const tx = await marketMakersRepo.trade(outcomeTokenAmounts, cost, account)
+      console.log({ tx })
+
+      await getMarketInfo()
+    } catch (e) {
+      console.error('Failed to buy:', e)
+      setVoteInProgress(null)
+      throw e
     }
-
-    const tx = await marketMakersRepo.trade(outcomeTokenAmounts, cost, account)
-    console.log({ tx })
-
-    await getMarketInfo()
   }
 
   const sell = async (outcomeToken = selectedOutcomeToken) => {
-    const collateral = await marketMakersRepo.getCollateralToken()
-    const formatedAmount = new BigNumber(selectedAmount).multipliedBy(
-      new BigNumber(Math.pow(10, collateral.decimals)),
-    )
+    try {
+      setVoteInProgress('sell')
+      const collateral = await marketMakersRepo.getCollateralToken()
+      const formatedAmount = new BigNumber(selectedAmount).multipliedBy(
+        new BigNumber(Math.pow(10, collateral.decimals)),
+      )
 
-    const isApproved = await conditionalTokensRepo.isApprovedForAll(account, marketInfo.lmsrAddress)
-    if (!isApproved) {
-      await conditionalTokensRepo.setApprovalForAll(marketInfo.lmsrAddress, true, account)
+      const isApproved = await conditionalTokensRepo.isApprovedForAll(account, marketInfo.lmsrAddress)
+      if (!isApproved) {
+        await conditionalTokensRepo.setApprovalForAll(marketInfo.lmsrAddress, true, account)
+      }
+
+      const outcomeTokenAmounts = Array.from({ length: marketInfo.outcomes.length }, (v, i) =>
+        i === outcomeToken ? formatedAmount.negated() : new BigNumber(0),
+      ).map(item => item.toString())
+      const profit = (await marketMakersRepo.calcNetCost(outcomeTokenAmounts)).neg()
+
+      const tx = await marketMakersRepo.trade(outcomeTokenAmounts, profit, account)
+      console.log({ tx })
+
+      await getMarketInfo()
+    } catch (e) {
+      console.error('Failed to sell:', e)
+      setVoteInProgress(null)
+      throw e
     }
-
-    const outcomeTokenAmounts = Array.from({ length: marketInfo.outcomes.length }, (v, i) =>
-      i === outcomeToken ? formatedAmount.negated() : new BigNumber(0),
-    ).map(item => item.toString())
-    const profit = (await marketMakersRepo.calcNetCost(outcomeTokenAmounts)).neg()
-
-    const tx = await marketMakersRepo.trade(outcomeTokenAmounts, profit, account)
-    console.log({ tx })
-
-    await getMarketInfo()
   }
 
   const redeem = async () => {
@@ -211,6 +229,7 @@ const Market: React.FC<MarketProps> = ({ web3, account }) => {
       selectedAmount={selectedAmount}
       setSelectedOutcomeToken={setSelectedOutcomeToken}
       selectedOutcomeToken={selectedOutcomeToken}
+      voteInProgress={voteInProgress}
       buy={buy}
       sell={sell}
       redeem={redeem}
